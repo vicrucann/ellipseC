@@ -178,7 +178,7 @@ vector<T> trgtDataCalc(image_double img_avg, T cx, T cy, T delta) {
 }
 
 template <typename T>
-T centerLMA(image_double sub_img, bool clr, T& centerX, T& centerY)
+T centerLMA(image_double sub_img, bool clr, T& lambda1, T& lambda2, T& theta, T& centerX, T& centerY)
 {
 	image_double img_avg = average_image(sub_img);
 	int w = sub_img->xsize; 
@@ -189,8 +189,10 @@ T centerLMA(image_double sub_img, bool clr, T& centerX, T& centerY)
 	vector<T> trgData = trgtDataCalc<T>(img_avg, P[3], P[4], radi*2);
 	LMTacheC<T> ellipseLMA(img_avg, P[3], P[4], radi*2, clr, w, h);
 	T rmse = ellipseLMA.minimize(P, trgData, 0.001);
-	free_image_double(img_avg);
-    //T lambda1 = P[0]; T lambda2 = P[1]; T theta = P[2];
+	free_image_double(img_avg);  
+    lambda1 = P[0]; 
+    lambda2 = P[1];
+    theta = P[2];
 	centerX = P[3];
 	centerY = P[4];
 	return rmse;
@@ -202,7 +204,7 @@ int main(int argc, char ** argv)
 	image_double img = read_pgm_image_double(argv[1]);
 	double cx=0, cy=0, l1 = 0, l2 = 0, th = 0;
 	centerLMA<double>(img, clr, l1, l2, th, cx, cy);	
-free_image_double(img);
+    free_image_double(img);
 	printf("%f %f %f %f %f", l1, l2, th, cx, cy);
 
 	return 0; 	
