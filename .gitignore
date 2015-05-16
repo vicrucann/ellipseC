@@ -1,7 +1,10 @@
 # User defined
 *~
 *.swp
-
+CMakeCache.txt
+Makefile
+*.cmake
+CMakeFiles
 
 # Compiled Object files
 *.slo
